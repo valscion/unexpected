@@ -4,6 +4,19 @@ function idToName(id) {
     return id.replace(/-/g, ' ');
 }
 
+function reorderKeys(obj, comparator) {
+    return Object.keys(obj).sort(comparator).reduce(function (reorderedObj, type) {
+        reorderedObj[type] = obj[type];
+        return reorderedObj;
+    }, {});
+}
+
+function lowerCaseComparator(a, b) {
+    if (a.toLowerCase() < b.toLowerCase()) return -1;
+    if (a.toLowerCase() > b.toLowerCase()) return 1;
+    return 0;
+}
+
 metalSmith(__dirname)
     .destination('../site-build')
     .source('src')
@@ -52,20 +65,13 @@ metalSmith(__dirname)
     .use(function (files, metalsmith, next) {
         var metadata = metalsmith.metadata();
 
-        // Make sure that the most important types are listed first and in this order:
-        var assertionsByType = {
-            any: [],
-            array: [],
-            boolean: [],
-            function: [],
-            number: [],
-            object: [],
-            string: []
-        };
+        var assertionsByType = {};
         metadata.collections.assertions.forEach(function (assertion) {
             assertionsByType[assertion.type] = assertionsByType[assertion.type] || [];
             assertionsByType[assertion.type].push(assertion);
         });
+        assertionsByType = reorderKeys(assertionsByType, lowerCaseComparator);
+
         Object.keys(assertionsByType).forEach(function (type) {
             assertionsByType[type].sort(function (a, b) {
                 if (a.name < b.name) return -1;
