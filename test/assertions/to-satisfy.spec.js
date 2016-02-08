@@ -1475,4 +1475,32 @@ describe('to satisfy assertion', function () {
             );
         });
     });
+
+    describe('with an array with non-numerical properties', function () {
+        var subject = [ 123 ];
+        subject.foobar = 456;
+
+        it('should succeed', function () {
+            expect(subject, 'to exhaustively satisfy', {
+                0: 123,
+                foobar: 456
+            });
+        });
+
+        it('should fail with a diff', function () {
+            expect(function () {
+                expect(subject, 'to exhaustively satisfy', {
+                    0: 123,
+                    foobar: 987
+                });
+            }, 'to throw',
+                "expected [ 123 ] to exhaustively satisfy { 0: 123, foobar: 987 }\n" +
+                "\n" +
+                "[\n" +
+                "  123\n" +
+                "  foobar: 456 // should equal 987\n" +
+                "]"
+            );
+        });
+    });
 });
