@@ -1477,30 +1477,73 @@ describe('to satisfy assertion', function () {
     });
 
     describe('with an array with non-numerical properties', function () {
-        var subject = [ 123 ];
-        subject.foobar = 456;
+        describe('satisfied exhaustively against an object', function () {
+            it('should succeed', function () {
+                var subject = [ 123 ];
+                subject.foobar = 456;
+                expect(subject, 'to exhaustively satisfy', {
+                    0: 123,
+                    foobar: 456
+                });
+            });
 
-        it('should succeed', function () {
-            expect(subject, 'to exhaustively satisfy', {
-                0: 123,
-                foobar: 456
+            it('should fail with a diff', function () {
+                var subject = [ 123 ];
+                subject.foobar = 456;
+                expect(function () {
+                    expect(subject, 'to exhaustively satisfy', {
+                        0: 123,
+                        foobar: 987
+                    });
+                }, 'to throw',
+                    "expected [ 123, foobar: 456 ] to exhaustively satisfy { 0: 123, foobar: 987 }\n" +
+                    "\n" +
+                    "[\n" +
+                    "  123,\n" +
+                    "  foobar: 456 // should equal 987\n" +
+                    "]"
+                );
             });
         });
 
-        it('should fail with a diff', function () {
-            expect(function () {
-                expect(subject, 'to exhaustively satisfy', {
-                    0: 123,
-                    foobar: 987
-                });
-            }, 'to throw',
-                "expected [ 123, foobar: 456 ] to exhaustively satisfy { 0: 123, foobar: 987 }\n" +
-                "\n" +
-                "[\n" +
-                "  123,\n" +
-                "  foobar: 456 // should equal 987\n" +
-                "]"
-            );
+        describe('satisfied exhaustively against another array', function () {
+            it('should succeed', function () {
+                var subject = [ 123 ];
+                subject.foobar = 456;
+
+                var expected = [ 123 ];
+                expected.foobar = 456;
+                expect(subject, 'to exhaustively satisfy', expected);
+            });
+
+            it('should fail with a diff', function () {
+                var subject = [1, 2, 3];
+                subject.foo = 123;
+                subject.bar = 456;
+                subject.quux = {};
+
+                var expected = [1, 2, 3];
+                expected.bar = 456;
+                expected.baz = 789;
+                expected.quux = false;
+
+                expect(function () {
+                    expect(subject, 'to satisfy', expected);
+                }, 'to throw',
+                    "expected [ 1, 2, 3, foo: 123, bar: 456, quux: {} ]\n" +
+                    "to satisfy [ 1, 2, 3, bar: 456, baz: 789, quux: false ]\n" +
+                    "\n" +
+                    "[\n" +
+                    "  1,\n" +
+                    "  2,\n" +
+                    "  3,\n" +
+                    "  foo: 123, // should be removed\n" +
+                    "  bar: 456,\n" +
+                    "  quux: {} // should equal false\n" +
+                    "  // missing baz: 789\n" +
+                    "]"
+                );
+            });
         });
     });
 });
