@@ -1494,10 +1494,10 @@ describe('to satisfy assertion', function () {
                     foobar: 987
                 });
             }, 'to throw',
-                "expected [ 123 ] to exhaustively satisfy { 0: 123, foobar: 987 }\n" +
+                "expected [ 123, foobar: 456 ] to exhaustively satisfy { 0: 123, foobar: 987 }\n" +
                 "\n" +
                 "[\n" +
-                "  123\n" +
+                "  123,\n" +
                 "  foobar: 456 // should equal 987\n" +
                 "]"
             );
