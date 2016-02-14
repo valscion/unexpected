@@ -1517,7 +1517,7 @@ describe('to satisfy assertion', function () {
             });
 
             it('should fail with a diff', function () {
-                var subject = [1, 2, 3];
+                var subject = [2, 3, 1];
                 subject.foo = 123;
                 subject.bar = 456;
                 subject.quux = {};
@@ -1530,13 +1530,14 @@ describe('to satisfy assertion', function () {
                 expect(function () {
                     expect(subject, 'to satisfy', expected);
                 }, 'to throw',
-                    "expected [ 1, 2, 3, foo: 123, bar: 456, quux: {} ]\n" +
+                    "expected [ 2, 3, 1, foo: 123, bar: 456, quux: {} ]\n" +
                     "to satisfy [ 1, 2, 3, bar: 456, baz: 789, quux: false ]\n" +
                     "\n" +
                     "[\n" +
-                    "  1,\n" +
+                    "  // missing 1\n" +
                     "  2,\n" +
                     "  3,\n" +
+                    "  1, // should be removed\n" +
                     "  foo: 123, // should be removed\n" +
                     "  bar: 456,\n" +
                     "  quux: {} // should equal false\n" +
