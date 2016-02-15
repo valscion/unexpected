@@ -21,7 +21,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "array-changes": "git://github.com/unexpectedjs/array-changes.git#feature/nonNumericalProperties",
-    "array-changes": "git://github.com/papandreou/array-changes-async.git#feature/nonNumericalProperties",
+    "array-changes-async": "git://github.com/papandreou/array-changes-async.git#feature/nonNumericalProperties",
     "bluebird": "2.9.34",
     "detect-indent": "3.0.1",
     "diff": "1.1.0",
