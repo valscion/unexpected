@@ -1027,9 +1027,10 @@ describe('to satisfy assertion', function () {
                "expected Error('foo') to satisfy { message: \'bar\' }\n" +
                "\n" +
                "{\n" +
-               "  message: 'foo' // should equal 'bar'\n" +
-               "                 // -foo\n" +
-               "                 // +bar\n" +
+               "  message:\n" +
+               "    'foo' // should equal 'bar'\n" +
+               "          // -foo\n" +
+               "          // +bar\n" +
                "}");
     });
 
@@ -1206,19 +1207,17 @@ describe('to satisfy assertion', function () {
             }, 'to throw',
                    "expected\n" +
                    "{\n" +
-                   "  foo:\n" +
-                   "    +-+\n" +
-                   "    |2|\n" +
-                   "    |_|,\n" +
+                   "  foo: +-+\n" +
+                   "       |2|\n" +
+                   "       |_|,\n" +
                    "  bar: 'baz'\n" +
                    "}\n" +
                    "to satisfy { bar: 'quux' }\n" +
                    "\n" +
                    "{\n" +
-                   "  foo:\n" +
-                   "    +-+\n" +
-                   "    |2|\n" +
-                   "    |_|,\n" +
+                   "  foo: +-+\n" +
+                   "       |2|\n" +
+                   "       |_|,\n" +
                    "  bar: 'baz' // should equal 'quux'\n" +
                    "             // -baz\n" +
                    "             // +quux\n" +
