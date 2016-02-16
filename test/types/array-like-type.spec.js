@@ -130,4 +130,23 @@ describe('array-like type', function () {
             );
         });
     });
+
+    function toArguments() {
+        return arguments;
+    }
+
+    describe('when both types have numericalPropertiesOnly set', function () {
+        it('should only compare numerical properties for equality', function () {
+            var a = toArguments(1, 2);
+            var b = toArguments(1, 2);
+            b.foo = 123;
+            expect(a, 'to equal', b);
+        });
+
+        it('should fail when a numerical property has different values', function () {
+            var a = toArguments(1, 3);
+            var b = toArguments(1, 2);
+            expect(a, 'not to equal', b);
+        });
+    });
 });
